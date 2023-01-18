@@ -1,89 +1,97 @@
 <script setup>
-import { supabase } from '../supabase'
-import { onMounted, ref, toRefs } from 'vue'
+import { supabase } from "../supabase";
+import { onMounted, ref } from "vue";
+import { useAuthStore } from "../stores/authStore";
+import router from "../router";
 
-const props = defineProps(['session'])
-const { session } = toRefs(props)
+const authStore = useAuthStore();
+const loading = ref(true);
 
-const loading = ref(true)
-const username = ref('')
+let username = ref("");
+let user = ref({});
 
 onMounted(() => {
-    getProfile()
-})
+    try {
+        user.value = authStore.getSession.user;
+        getProfile();
+    } catch (error) {
+        console.log(`Account.vue:onMounted() => ${error.message}`);
+        router.push('/login');
+    }
+});
 
 async function getProfile() {
     try {
-        loading.value = true
-        const { user } = session.value
+        loading.value = true;
 
         let { data, error, status } = await supabase
-            .from('profiles')
+            .from("profiles")
             .select(`username`)
-            .eq('id', user.id)
-            .single()
+            .eq("id", user.value.id)
+            .single();
 
-        if (error && status !== 406) throw error
+        if (error && status !== 406) throw error;
 
         if (data) {
-            username.value = data.username
+            username.value = data.username;
         }
     } catch (error) {
-        alert(error.message)
+        console.log(`getProfile: ${error.message}`);
     } finally {
-        loading.value = false
+        loading.value = false;
     }
 }
 
 async function updateProfile() {
     try {
-        loading.value = true
-        const { user } = session.value
+        loading.value = true;
 
         const updates = {
-            id: user.id,
+            id: user.value.id,
             username: username.value,
             updated_at: new Date(),
-        }
+        };
 
-        let { error } = await supabase.from('profiles').upsert(updates)
+        let { error } = await supabase.from("profiles").upsert(updates);
 
-        if (error) throw error
+        if (error) throw error;
     } catch (error) {
-        alert(error.message)
+        console.log(`updateProfile: ${error.message}`);
     } finally {
-        loading.value = false
+        loading.value = false;
     }
 }
 
 async function signOut() {
     try {
-        loading.value = true
-        let { error } = await supabase.auth.signOut()
-        if (error) throw error
+        loading.value = true;
+        let { error } = await supabase.auth.signOut();
+        authStore.setSession(null);
+        if (error) throw error;
     } catch (error) {
-        alert(error.message)
+        console.log(`signOut: ${error.message}`);
     } finally {
-        loading.value = false
+        loading.value = false;
+        router.push('/login');
     }
 }
 </script>
 
 <template>
-    <div class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div v-if="!loading" class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="w-full max-w-md space-y-8">
             <form class="mt-8 space-y-6" @submit.prevent="updateProfile">
                 <div class="-space-y-px rounded-md shadow-sm w-full">
                     <div>
                         <label for="email-address">Email address</label>
-                        <input id="email-address" name="email" type="email" autocomplete="email"
-                               :value="session.user.email" disabled>
+                        <input id="email-address" name="email" type="email" autocomplete="email" :value="user.email"
+                               disabled />
                     </div>
                 </div>
                 <div class="-space-y-px rounded-md shadow-sm w-full">
                     <div>
                         <label for="username">Name</label>
-                        <input id="username" name="username" type="text" v-model="username">
+                        <input id="username" name="username" type="text" v-model="username" />
                     </div>
                 </div>
 
@@ -93,7 +101,9 @@ async function signOut() {
                 </div>
 
                 <div>
-                    <button class="button block" @click="signOut" :disabled="loading">Sign Out</button>
+                    <button class="button block" @click="signOut" :disabled="loading">
+                        Sign Out
+                    </button>
                 </div>
             </form>
         </div>

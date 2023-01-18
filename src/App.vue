@@ -1,25 +1,29 @@
 <script setup>
-  import { onMounted, ref } from 'vue'
-  import Account from './components/Account.vue'
-  import Auth from './components/Auth.vue'
-  import { supabase } from './supabase'
+import { onMounted } from "vue";
+import Navbar from "./components/Navbar.vue";
+import { supabase } from "./supabase";
+import { useAuthStore } from "./stores/authStore";
 
-  const session = ref()
+const store = useAuthStore();
 
-  onMounted(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      session.value = data.session
-    })
+onMounted(() => {
+  supabase.auth.getSession().then(({ data }) => {
+    store.setSession(data.session)
+    console.log(`App.vue: session set ` + data.session)
+    store.setIsAuthenticated(data.session?.user?.aud == 'authenticated')
+  });
 
-    supabase.auth.onAuthStateChange((_, _session) => {
-      session.value = _session
-    })
-  })
+  supabase.auth.onAuthStateChange((_, _session) => {
+    store.setSession(_session)
+    console.log(`App.vue: session changed ` + _session)
+    store.setIsAuthenticated(_session?.user?.aud == 'authenticated')
+  });
+});
 </script>
 
 <template>
+  <Navbar />
   <div class="container" style="padding: 50px 0 100px 0">
-    <Account v-if="session" :session="session" />
-    <Auth v-else />
+    <router-view></router-view>
   </div>
 </template>
