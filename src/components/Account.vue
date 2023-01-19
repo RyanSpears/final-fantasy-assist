@@ -1,84 +1,87 @@
 <script setup>
-import { supabase } from "../supabase";
-import { onMounted, ref } from "vue";
-import { useAuthStore } from "../stores/authStore";
-import router from "../router";
+import { supabase } from "../supabase"
+import { onMounted, ref } from "vue"
+import { useAuthStore } from "../stores/authStore"
+import router from "../router"
 
-const authStore = useAuthStore();
-const loading = ref(true);
+const authStore = useAuthStore()
+const loading = ref(true)
 
-let username = ref("");
-let user = ref({});
+let username = ref("")
+let user = ref({})
 
 onMounted(() => {
     try {
-        user.value = authStore.getSession.user;
-        getProfile();
+        user.value = authStore.getSession.user
+        getProfile()
     } catch (error) {
-        console.log(`Account.vue:onMounted() => ${error.message}`);
-        router.push('/login');
+        authStore.$patch({ session: null })
+        router.push("/login")
     }
-});
+})
 
 async function getProfile() {
     try {
-        loading.value = true;
+        loading.value = true
 
         let { data, error, status } = await supabase
             .from("profiles")
             .select(`username`)
             .eq("id", user.value.id)
-            .single();
+            .single()
 
-        if (error && status !== 406) throw error;
+        if (error && status !== 406) throw error
 
         if (data) {
-            username.value = data.username;
+            username.value = data.username
         }
     } catch (error) {
-        console.log(`getProfile: ${error.message}`);
+        alert(`getProfile: ${error.message}`)
     } finally {
-        loading.value = false;
+        loading.value = false
     }
 }
 
 async function updateProfile() {
     try {
-        loading.value = true;
+        loading.value = true
 
         const updates = {
             id: user.value.id,
             username: username.value,
             updated_at: new Date(),
-        };
+        }
 
-        let { error } = await supabase.from("profiles").upsert(updates);
+        let { error } = await supabase.from("profiles").upsert(updates)
 
-        if (error) throw error;
+        if (error) throw error
     } catch (error) {
-        console.log(`updateProfile: ${error.message}`);
+        alert(`updateProfile: ${error.message}`)
     } finally {
-        loading.value = false;
+        loading.value = false
     }
 }
 
 async function signOut() {
     try {
-        loading.value = true;
-        let { error } = await supabase.auth.signOut();
-        authStore.setSession(null);
-        if (error) throw error;
+        loading.value = true
+        let { error } = await supabase.auth.signOut().then(() => {
+            authStore.$patch({
+                session: null,
+            })
+        })
+        if (error) throw error
     } catch (error) {
-        console.log(`signOut: ${error.message}`);
+        alert(`signOut: ${error.message}`)
     } finally {
-        loading.value = false;
-        router.push('/login');
+        loading.value = false
+        router.push("/login")
     }
 }
 </script>
 
 <template>
-    <div v-if="!loading" class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div v-if="!loading && user" class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="w-full max-w-md space-y-8">
             <form class="mt-8 space-y-6" @submit.prevent="updateProfile">
                 <div class="-space-y-px rounded-md shadow-sm w-full">

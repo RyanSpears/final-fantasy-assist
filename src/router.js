@@ -10,7 +10,7 @@ import { useAuthStore } from "./stores/authStore";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/", name: "dashboard", component: Dashboard },
+    { path: "/", redirect: "/dashboard", component: Dashboard },
     { path: "/dashboard", name: "dashboard", component: Dashboard },
     { path: "/characters", name: "characters", component: Characters },
     { path: "/profile", name: "profile", component: Account },
@@ -21,12 +21,14 @@ const router = createRouter({
   linkExactActiveClass: "active",
 });
 
-
 router.beforeEach((to) => {
   const store = useAuthStore();
-  if (to.name !== 'login' && !store.getIsAuthenticated) {
-    return '/login'
+  if (to.name !== "login" && !store.getIsAuthenticated) {
+    return "/login";
   }
-})
+  if (to.name == "login" && store.getIsAuthenticated) {
+    return "/dashboard";
+  }
+});
 
 export default router;
