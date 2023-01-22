@@ -1,27 +1,29 @@
 <script setup>
-import { onMounted } from "vue";
-import Navbar from "./components/Navbar.vue";
-import { supabase } from "./supabase";
-import { useAuthStore } from "./stores/authStore";
+import { onMounted } from "vue"
+import Navbar from "./components/Navbar.vue"
+import { supabase } from "./supabase"
+import { useAuthStore } from "./stores/authStore"
+import { useCharacterStore } from "./stores/characterStore"
 
-const store = useAuthStore();
+const authStore = useAuthStore()
+const characterStore = useCharacterStore()
 
 onMounted(() => {
   supabase.auth.getSession().then(({ data }) => {
-    store.setSession(data.session);
+    authStore.setSession(data.session)
   });
 
   supabase.auth.onAuthStateChange((_, _session) => {
-    store.$patch({
-      session: _session,
+    authStore.$patch({
+      session: _session
     })
-  });
-});
+  })
+})
 </script>
 
 <template>
   <Navbar />
-  <div class="container" style="padding: 50px 0 100px 0">
+  <div style="padding: 50px 0 100px 0">
     <router-view></router-view>
   </div>
 </template>
