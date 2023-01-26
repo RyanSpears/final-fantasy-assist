@@ -4,6 +4,7 @@ import Dashboard from "./components/Dashboard.vue";
 import NotFound from "./components/NotFound.vue";
 import Characters from "./components/Characters.vue";
 import CharacterEdit from "./components/CharacterEdit.vue";
+import CharacterNew from "./components/CharacterNew.vue";
 import Auth from "./components/Auth.vue";
 import Account from "./components/Account.vue";
 import { useAuthStore } from "./stores/authStore";
@@ -14,7 +15,13 @@ const router = createRouter({
     { path: "/", redirect: "/dashboard", component: Dashboard },
     { path: "/dashboard", name: "dashboard", component: Dashboard },
     { path: "/characters", name: "characters", component: Characters },
-    { path: "/characters/:characterId", name: "character-edit", component: CharacterEdit, props: true },
+    { path: "/characters/new", name: "character-new", component: CharacterNew },
+    {
+      path: "/characters/:characterId",
+      name: "character-edit",
+      component: CharacterEdit,
+      props: true,
+    },
     { path: "/profile", name: "profile", component: Account },
     { path: "/login", name: "login", component: Auth },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },

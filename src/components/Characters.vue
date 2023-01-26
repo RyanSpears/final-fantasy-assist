@@ -41,7 +41,9 @@ onMounted(() => {
           <td>{{ character.luck }}</td>
           <td>
             <a :href="'/characters/' + character.id"
-               class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Edit</a>
+               class="bg-blue-100 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-white">Edit</a>
+            <a @click="deleteCharacter(character.id)"
+               class="bg-blue-100 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-white">Delete</a>
           </td>
         </tr>
       </tbody>

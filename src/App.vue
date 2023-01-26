@@ -3,10 +3,8 @@ import { onMounted } from "vue"
 import Navbar from "./components/Navbar.vue"
 import { supabase } from "./supabase"
 import { useAuthStore } from "./stores/authStore"
-import { useCharacterStore } from "./stores/characterStore"
 
 const authStore = useAuthStore()
-const characterStore = useCharacterStore()
 
 onMounted(() => {
   supabase.auth.getSession().then(({ data }) => {
