@@ -42,7 +42,6 @@ export const useCharacterStore = defineStore("CharacterStore", {
         }
 
         this.setCharacters(characters);
-
       } catch (err) {
         this.error = err;
         console.error("Error retrieving data from db", err);
@@ -69,7 +68,6 @@ export const useCharacterStore = defineStore("CharacterStore", {
         }
 
         this.setCharacter(characters[0]);
-
       } catch (err) {
         this.error = err;
         console.error("Error retrieving data from db", err);
@@ -77,11 +75,40 @@ export const useCharacterStore = defineStore("CharacterStore", {
         this.loading = false;
       }
     },
+    async deleteCharacter(id) {
+      this.loading = true;
+      try {
+        const { data, error } = await supabase
+          .from("characters")
+          .delete()
+          .match({ id: id });
+
+        if (error) {
+          this.error = error;
+          return;
+        }
+
+        if (data === null) {
+          this.character = null;
+          return;
+        }
+
+        this.setCharacter(null);
+        this.setCharacters(this.characters.filter((c) => c.id != id));
+      } catch (err) {
+        this.error = err;
+        console.error("Error deleting data from db", err);
+      } finally {
+        this.loading = false;
+      }
+
+      return data;
+    },
     setCharacters(_characters) {
       this.characters = _characters;
     },
     setCharacter(_character) {
-      this.character = _character;;
+      this.character = _character;
     },
     setSession(_session) {
       this.session = _session;

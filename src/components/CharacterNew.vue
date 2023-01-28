@@ -4,6 +4,8 @@ import router from "../router";
 import { species } from "fantastical";
 import { useAuthStore } from "../stores/authStore";
 import { onMounted, ref } from "vue";
+import { roll } from "../lib/diceHelpers"
+import { getName } from "../lib/nameHelpers"
 
 const authStore = useAuthStore();
 const loading = ref(true);
@@ -19,19 +21,15 @@ function randomizeUser() {
     loading.value = true;
 
     newCharacter = {
-        name: species.dwarf("male"),
+        name: getName(),
         user_id: authStore.getSession.user.id,
-        skill: 6 + getDiceRoll(6),
-        stamina: 12 + getDiceRoll(12),
-        luck: 6 + getDiceRoll(6),
+        skill: 6 + roll(1, 6),
+        stamina: 12 + roll(2, 6),
+        luck: 6 + roll(1, 6),
         updated_at: new Date(),
     };
 
     loading.value = false;
-}
-
-function getDiceRoll(number) {
-    return Math.floor(Math.random() * number) + 1;
 }
 
 async function createCharacter() {
