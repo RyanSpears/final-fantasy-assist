@@ -20,7 +20,6 @@ const router = createRouter({
       path: "/characters/:characterId",
       name: "character-edit",
       component: CharacterEdit,
-      props: true,
     },
     { path: "/profile", name: "profile", component: Account },
     { path: "/login", name: "login", component: Auth },

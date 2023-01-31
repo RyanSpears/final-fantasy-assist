@@ -52,22 +52,22 @@ export const useCharacterStore = defineStore("CharacterStore", {
     async fetchCharacter(id) {
       this.loading = true;
       try {
-        const { data: characters, error } = await supabase
+        const { data, error } = await supabase
           .from("characters")
           .select("*")
-          .order("id", id);
+          .eq("id", id); // Correct
 
         if (error) {
           this.error = error;
           return;
         }
 
-        if (characters === null) {
+        if (data === null) {
           this.character = null;
           return;
         }
 
-        this.setCharacter(characters[0]);
+        this.setCharacter(data[0]);
       } catch (err) {
         this.error = err;
         console.error("Error retrieving data from db", err);

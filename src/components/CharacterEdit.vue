@@ -12,9 +12,7 @@ const { character, loading, error } = storeToRefs(useCharacterStore())
 const { fetchCharacter } = useCharacterStore()
 
 onMounted(() => {
-    if (character.value == null) {
-        fetchCharacter(route.params.characterId)
-    }
+    fetchCharacter(route.params.characterId)
 });
 
 watch(() => route.params.characterId, (selection, prevSelection) => {
