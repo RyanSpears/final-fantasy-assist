@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`mount component 1`] = `
+"<div class=\\"flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8\\">
+  <h1>Welcome to Final Fantasy Assist</h1>
+</div>"
+`;

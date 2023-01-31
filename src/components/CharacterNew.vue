@@ -23,9 +23,9 @@ function randomizeUser() {
     newCharacter = {
         name: getName(),
         user_id: authStore.getSession.user.id,
-        skill: 6 + roll(1, 6),
-        stamina: 12 + roll(2, 6),
-        luck: 6 + roll(1, 6),
+        skill: 6 + roll(6, 1),
+        stamina: 12 + roll(6, 2),
+        luck: 6 + roll(6, 1),
         updated_at: new Date(),
     };
 
