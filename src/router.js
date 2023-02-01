@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
-
-import Dashboard from "./components/Dashboard.vue";
-import NotFound from "./components/NotFound.vue";
-import Characters from "./components/Characters.vue";
+import { useAuthStore } from "./stores/authStore";
+import Account from "./components/Account.vue";
+import Auth from "./components/Auth.vue";
+import Books from "./components/Books.vue";
 import CharacterEdit from "./components/CharacterEdit.vue";
 import CharacterNew from "./components/CharacterNew.vue";
+import Characters from "./components/Characters.vue";
+import Dashboard from "./components/Dashboard.vue";
 import Monsters from "./components/Monsters.vue";
-import Auth from "./components/Auth.vue";
-import Account from "./components/Account.vue";
-import { useAuthStore } from "./stores/authStore";
+import NotFound from "./components/NotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -23,6 +23,7 @@ const router = createRouter({
       component: CharacterEdit,
     },
     { path: "/monsters", name: "monsters", component: Monsters },
+    { path: "/books", name: "books", component: Books },
     { path: "/profile", name: "profile", component: Account },
     { path: "/login", name: "login", component: Auth },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },

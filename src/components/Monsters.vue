@@ -35,6 +35,7 @@ onMounted(() => {
           <th scope="col" class="text-sm font-medium text-white px-6 py-4">Name</th>
           <th scope="col" class="text-sm font-medium text-white px-6 py-4">Skill</th>
           <th scope="col" class="text-sm font-medium text-white px-6 py-4">Stamina</th>
+          <th scope="col" class="text-sm font-medium text-white px-6 py-4">Book</th>
         </tr>
       </thead>
       <tbody>
@@ -45,6 +46,7 @@ onMounted(() => {
           <td>{{ monster.name }}</td>
           <td>{{ monster.skill }}</td>
           <td>{{ monster.stamina }}</td>
+          <td>{{ monster.books.title }}</td>
         </tr>
       </tbody>
     </table>

@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
-import { supabase } from '../supabase';
+import { defineStore } from "pinia";
+import { supabase } from "../supabase";
 
-export const useMonsterStore = defineStore('MonsterStore', {
+export const useMonsterStore = defineStore("MonsterStore", {
   state: () => {
     return {
       loading: false,
@@ -20,9 +20,9 @@ export const useMonsterStore = defineStore('MonsterStore', {
       this.loading = true;
       try {
         let { data: monsters, error } = await supabase
-          .from('monsters')
-          .select('*')
-          .order('id');
+          .from("monsters")
+          .select(`*, books(title)`)
+          .order("id");
 
         console.log(`monsters count ${monsters.length}`);
 
@@ -39,7 +39,7 @@ export const useMonsterStore = defineStore('MonsterStore', {
         this.setMonsters(monsters);
       } catch (err) {
         this.error = err;
-        console.error('Error retrieving data from db', err);
+        console.error("Error retrieving data from db", err);
       } finally {
         this.loading = false;
       }
