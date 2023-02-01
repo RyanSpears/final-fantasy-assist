@@ -5,6 +5,7 @@ import NotFound from "./components/NotFound.vue";
 import Characters from "./components/Characters.vue";
 import CharacterEdit from "./components/CharacterEdit.vue";
 import CharacterNew from "./components/CharacterNew.vue";
+import Monsters from "./components/Monsters.vue";
 import Auth from "./components/Auth.vue";
 import Account from "./components/Account.vue";
 import { useAuthStore } from "./stores/authStore";
@@ -21,6 +22,7 @@ const router = createRouter({
       name: "character-edit",
       component: CharacterEdit,
     },
+    { path: "/monsters", name: "monsters", component: Monsters },
     { path: "/profile", name: "profile", component: Account },
     { path: "/login", name: "login", component: Auth },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },

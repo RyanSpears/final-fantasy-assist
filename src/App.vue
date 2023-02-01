@@ -7,9 +7,10 @@ import { useAuthStore } from "./stores/authStore"
 const authStore = useAuthStore()
 
 onMounted(() => {
-  supabase.auth.getSession().then(({ data }) => {
-    authStore.setSession(data.session)
-  });
+  supabase.auth.getSession()
+    .then(({ data }) => {
+      authStore.setSession(data.session)
+    });
 
   supabase.auth.onAuthStateChange((_, _session) => {
     authStore.$patch({

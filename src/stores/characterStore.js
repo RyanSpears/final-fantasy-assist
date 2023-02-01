@@ -110,8 +110,5 @@ export const useCharacterStore = defineStore("CharacterStore", {
     setCharacter(_character) {
       this.character = _character;
     },
-    setSession(_session) {
-      this.session = _session;
-    },
   },
 });
