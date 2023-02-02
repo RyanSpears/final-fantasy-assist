@@ -32,8 +32,6 @@ async function updateCharacter() {
             updated_at: new Date(),
         }
 
-        console.log(update)
-
         const { error } = await supabase
             .from("characters")
             .update(update)

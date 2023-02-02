@@ -13,7 +13,6 @@ const loading = ref(true);
 let newCharacter = null;
 
 onMounted(() => {
-    console.log("onMounted()");
     randomizeUser();
 });
 
@@ -35,8 +34,6 @@ function randomizeUser() {
 async function createCharacter() {
     try {
         loading.value = true;
-
-        console.log(newCharacter);
 
         const { data, error } = await supabase
             .from("characters")

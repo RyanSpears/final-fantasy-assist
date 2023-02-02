@@ -6,8 +6,6 @@ function roll(noOfSides, noOfRolls) {
     count += Math.floor(rand * noOfSides) + 1;
   }
 
-  console.log(`Dice roll ${count}`)
-  
   return count;
 }
 
